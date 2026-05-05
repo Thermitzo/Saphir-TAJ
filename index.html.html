@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GN RP - Fichier central</title>
+  <style>
+    * { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: url("./fond.jpg.png") no-repeat center center fixed;
+  background-size: cover;
+}
+    .hidden { display: none !important; }
+    .login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6); /* effet sombre transparent */
+  padding: 20px;
+.login-card h1,
+.login-card p,
+.login-card label {
+  display: none;
+}
+
+.login-card {
+  width: 360px;
+  background: rgba(5, 10, 18, 0.86);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 28px 32px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.65);
+  color: white;
+  text-align: center;
+  backdrop-filter: blur(6px);
+}
+
+.login-card h1 {
+  display: block;
+  color: white;
+  font-size: 22px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.login-card p {
+  display: block;
+  color: #94a3b8;
+  font-size: 13px;
+  margin-bottom: 18px;
+}
+
+.login-card label {
+  display: none;
+}
+
+.login-card input {
+  width: 100%;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: white;
+  height: 38px;
+  border-radius: 5px;
+  padding-left: 12px;
+}
+
+.login-card button {
+  width: 100%;
+  height: 42px;
+  margin-top: 10px;
+  background: #0b4fa3;
+  border-radius: 6px;
+}
+
+.login-card .muted {
+  display: block;
+  color: #cbd5e1;
+  font-size: 12px;
+  margin-top: 14px;
+}}
+    textarea { min-height: 78px; resize: vertical; }
+    button {
+      border: 0;
+      background: #1f4f7a;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover { filter: brightness(1.08); }
+    button.secondary { background: #475569; }
+    button.danger { background: #991b1b; }
+    button.gold { background: #b88720; color: #111827; }
+    .error { color: #b91c1c; margin-top: 12px; font-weight: bold; }
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 42px 1fr;
+      background: #e7e5df;
+    }
+    .topbar {
+      background: #15191f;
+      color: #d9e2ec;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+    .badge { color: #69c48a; font-weight: bold; }
+    .layout {
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      min-height: 0;
+    }
+    .sidebar {
+      background: linear-gradient(180deg, #343b40, #242a2e);
+      color: #e2e8f0;
+      padding: 18px;
+    }
+    .sidebar h2 { font-size: 22px; font-weight: 300; margin: 0 0 20px; }
+    .nav-btn {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 8px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.12);
+      color: #e2e8f0;
+    }
+    .nav-btn.active, .nav-btn:hover { background: #b88720; color: #111827; }
+    .content { padding: 24px; overflow: auto; }
+    .panel {
+      background: #f4f2ec;
+      border: 1px solid #d2cdc4;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    }
+    .panel h1, .panel h2 { margin-top: 0; font-weight: 300; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
+    th, td { padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: left; font-size: 14px; }
+    th { background: #233242; color: #e2e8f0; }
+    tr:hover td { background: #f8fafc; }
+    .muted { color: #64748b; }
+    .record-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: start;
+    }
+    .info-line {
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      border-bottom: 1px dotted #8b8b8b;
+      padding: 7px 0;
+      font-size: 14px;
+    }
+    .info-line strong { color: #111827; }
+    .pill {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    @media (max-width: 850px) {
+      .layout { grid-template-columns: 1fr; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+    }
+      .input-group {
+  display: flex;
+  align-items: center;
+  background: rgba(5, 10, 18, 0.86);
+  margin-bottom: 10px;
+  height: 38px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.input-group span {
+  padding: 0 10px;
+  font-size: 16px;
+}
+
+.input-group input {
+  border: none;
+  outline: none;
+  flex: 1;
+  height: 100%;
+  background: transparent;
+}
+  </style>
+
+</head>
+<body>
+  <section id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <h1>Fichier GN RP</h1>
+      <p>Connexion sécurisée - Serveur RP</p>
+      <label>Identifiant</label>
+<div class="input-group">
+  <span>👤</span>
+  <input id="loginUsername" placeholder="ex : admin" />
+</div>
+
+<div class="input-group">
+  <span>🔒</span>
+  <input id="loginPassword" type="password" placeholder="ex : admin123" />
+</div>
+      <div class="actions">
+        <button onclick="login()">Se connecter</button>
+      </div>
+      <div id="loginError" class="error"></div>
+      <p class="muted" style="margin-top:18px;font-size:13px;">Compte test : admin / admin123</p>
+    </div>
+  </section>
+
+  <section id="app" class="app hidden">
+    <header class="topbar">
+      <div><span class="badge">●</span> Gendarmerie Nationale RP - Fichier central</div>
+      <div><span id="currentUser"></span> <button class="secondary" onclick="logout()">Déconnexion</button></div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <h2>Menu GN</h2>
+        <button class="nav-btn active" onclick="showPage('dashboard', this)">Tableau de bord</button>
+        <button class="nav-btn" onclick="showPage('newCitizen', this)">Créer fiche contrevenant</button>
+        <button class="nav-btn" onclick="showPage('search', this)">Recherche</button>
+        <button class="nav-btn" onclick="showPage('users', this)">Gestion comptes</button>
+      </aside>
+
+      <main class="content">
+        <section id="dashboard" class="page panel">
+          <h1>Tableau de bord</h1>
+          <div class="grid-3">
+            <div class="panel"><h2 id="countCitizens">0</h2><p>Fiches contrevenants</p></div>
+            <div class="panel"><h2 id="countInfractions">0</h2><p>Infractions enregistrées</p></div>
+            <div class="panel"><h2 id="countVehicles">0</h2><p>Véhicules civils</p></div>
+          </div>
+          <h2>Dernières fiches</h2>
+          <div id="latestCitizens"></div>
+        </section>
+
+        <section id="newCitizen" class="page panel hidden">
+          <h1>Créer une fiche contrevenant</h1>
+          <div class="grid-2">
+            <div><label>Nom</label><input id="citizenNom" /></div>
+            <div><label>Prénom</label><input id="citizenPrenom" /></div>
+            <div><label>Date de naissance</label><input id="citizenNaissance" type="date" /></div>
+            <div><label>Numéro d'identité RP</label><input id="citizenIdentite" /></div>
+            <div><label>Permis de conduire</label><select id="citizenPermis"><option>Oui</option><option>Non</option></select></div>
+            <div><label>Permis de port d'arme</label><select id="citizenArme"><option>Non</option><option>Oui</option></select></div>
+          </div>
+          <label>Observations</label>
+          <textarea id="citizenObs"></textarea>
+          <div class="actions"><button onclick="createCitizen()">Créer la fiche</button></div>
+        </section>
+
+        <section id="search" class="page panel hidden">
+          <h1>Recherche fichier</h1>
+          <input id="searchInput" oninput="renderSearch()" placeholder="Rechercher par nom, prénom, identité ou plaque..." />
+          <div id="searchResults" style="margin-top:16px;"></div>
+        </section>
+
+        <section id="record" class="page hidden">
+          <div class="panel">
+            <div class="record-header">
+              <div>
+                <h1 id="recordTitle">Fiche</h1>
+                <p class="muted" id="recordSubtitle"></p>
+              </div>
+              <button class="danger" onclick="deleteCurrentCitizen()">Supprimer fiche</button>
+            </div>
+            <div id="recordInfos"></div>
+          </div>
+
+          <div class="panel">
+            <h2>Ajouter une infraction</h2>
+            <div class="grid-3">
+              <div><label>Type</label><select id="infType"><option>Amende</option><option>Délit</option><option>Crime</option><option>Avertissement</option></select></div>
+              <div><label>Libellé</label><input id="infLabel" placeholder="Ex : Excès de vitesse" /></div>
+              <div><label>Montant</label><input id="infAmount" type="number" placeholder="90" /></div>
+            </div>
+            <label>Commentaire</label><textarea id="infComment"></textarea>
+            <div class="actions"><button onclick="addInfraction()">Ajouter</button></div>
+            <h2>Historique infractions</h2>
+            <div id="infractionsList"></div>
+          </div>
+
+          <div class="panel">
+            <h2>Ajouter un véhicule civil</h2>
+            <div class="grid-3">
+              <div><label>Plaque</label><input id="vehPlate" placeholder="AB-123-CD" /></div>
+              <div><label>Modèle</label><input id="vehModel" placeholder="Renault Megane" /></div>
+              <div><label>Assurance</label><select id="vehInsurance"><option>Valide</option><option>Non valide</option></select></div>
+              <div><label>Déclaré volé</label><select id="vehStolen"><option>Non</option><option>Oui</option></select></div>
+            </div>
+            <div class="actions"><button onclick="addVehicle()">Ajouter véhicule</button></div>
+            <h2>Véhicules enregistrés</h2>
+            <div id="vehiclesList"></div>
+          </div>
+        </section>
+
+        <section id="users" class="page panel hidden">
+          <h1>Gestion des comptes</h1>
+          <p class="muted">Version RP locale : les comptes sont enregistrés dans le navigateur.</p>
+          <div class="grid-3">
+            <div><label>Identifiant</label><input id="newUserName" /></div>
+            <div><label>Mot de passe</label><input id="newUserPass" /></div>
+            <div><label>Grade / rôle</label><input id="newUserRole" placeholder="Gendarme, Brigadier, Major..." /></div>
+          </div>
+          <div class="actions"><button onclick="createUser()">Créer compte</button></div>
+          <div id="usersList" style="margin-top:18px;"></div>
+        </section>
+      </main>
+    </div>
+  </section>
+
+  <script>
+    const DB_KEY = 'gn_rp_database_v1';
+    let currentCitizenId = null;
+    let sessionUser = null;
+
+    function defaultDB() {
+      return {
+        users: [{ id: crypto.randomUUID(), username: 'admin', password: 'admin123', role: 'Commandement' }],
+        citizens: [],
+        infractions: [],
+        vehicles: []
+      };
+    }
+
+    function loadDB() {
+      const saved = localStorage.getItem(DB_KEY);
+      if (!saved) {
+        const db = defaultDB();
+        saveDB(db);
+        return db;
+      }
+      return JSON.parse(saved);
+    }
+
+    function saveDB(db) { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+
+    function login() {
+      const db = loadDB();
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      const user = db.users.find(u => u.username === username && u.password === password);
+      if (!user) {
+        document.getElementById('loginError').textContent = 'Identifiant ou mot de passe incorrect.';
+        return;
+      }
+      sessionUser = user;
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('app').classList.remove('hidden');
+      document.getElementById('currentUser').textContent = `${user.role} - ${user.username}`;
+      refreshAll();
+    }
+
+    function logout() { location.reload(); }
+
+    function showPage(id, btn) {
+      document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      refreshAll();
+    }
+
+    function createCitizen() {
+      const db = loadDB();
+      const citizen = {
+        id: crypto.randomUUID(),
+        nom: document.getElementById('citizenNom').value.trim(),
+        prenom: document.getElementById('citizenPrenom').value.trim(),
+        naissance: document.getElementById('citizenNaissance').value,
+        identite: document.getElementById('citizenIdentite').value.trim(),
+        permis: document.getElementById('citizenPermis').value,
+        arme: document.getElementById('citizenArme').value,
+        obs: document.getElementById('citizenObs').value.trim(),
+        createdBy: sessionUser?.username || 'Inconnu',
+        createdAt: new Date().toLocaleString('fr-FR')
+      };
+      if (!citizen.nom || !citizen.prenom || !citizen.identite) {
+        alert('Nom, prénom et numéro d’identité sont obligatoires.');
+        return;
+      }
+      db.citizens.push(citizen);
+      saveDB(db);
+      document.querySelectorAll('#newCitizen input, #newCitizen textarea').forEach(i => i.value = '');
+      openRecord(citizen.id);
+    }
+
+    function openRecord(id) {
+      currentCitizenId = id;
+      document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+      document.getElementById('record').classList.remove('hidden');
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      renderRecord();
+    }
+
+    function renderRecord() {
+      const db = loadDB();
+      const c = db.citizens.find(x => x.id === currentCitizenId);
+      if (!c) return;
+      document.getElementById('recordTitle').textContent = `${c.nom} ${c.prenom}`;
+      document.getElementById('recordSubtitle').textContent = `Fiche créée par ${c.createdBy} le ${c.createdAt}`;
+      document.getElementById('recordInfos').innerHTML = `
+        <div class="info-line"><strong>Numéro d'identité</strong><span>${c.identite}</span></div>
+        <div class="info-line"><strong>Date de naissance</strong><span>${c.naissance || 'Non renseignée'}</span></div>
+        <div class="info-line"><strong>Permis conduire</strong><span>${c.permis}</span></div>
+        <div class="info-line"><strong>Permis port d'arme</strong><span>${c.arme}</span></div>
+        <div class="info-line"><strong>Observations</strong><span>${c.obs || 'Aucune'}</span></div>
+      `;
+      renderInfractions();
+      renderVehicles();
+    }
+
+    function addInfraction() {
+      const db = loadDB();
+      const item = {
+        id: crypto.randomUUID(),
+        citizenId: currentCitizenId,
+        type: document.getElementById('infType').value,
+        label: document.getElementById('infLabel').value.trim(),
+        amount: document.getElementById('infAmount').value,
+        comment: document.getElementById('infComment').value.trim(),
+        agent: sessionUser?.username || 'Inconnu',
+        date: new Date().toLocaleString('fr-FR')
+      };
+      if (!item.label) { alert('Libellé obligatoire.'); return; }
+      db.infractions.push(item);
+      saveDB(db);
+      document.getElementById('infLabel').value = '';
+      document.getElementById('infAmount').value = '';
+      document.getElementById('infComment').value = '';
+      renderInfractions();
+      refreshAll();
+    }
+
+    function renderInfractions() {
+      const db = loadDB();
+      const list = db.infractions.filter(i => i.citizenId === currentCitizenId);
+      document.getElementById('infractionsList').innerHTML = list.length ? `
+        <table><tr><th>Date</th><th>Type</th><th>Libellé</th><th>Montant</th><th>Agent</th></tr>
+        ${list.map(i => `<tr><td>${i.date}</td><td><span class="pill">${i.type}</span></td><td>${i.label}<br><span class="muted">${i.comment || ''}</span></td><td>${i.amount || 0} €</td><td>${i.agent}</td></tr>`).join('')}
+        </table>` : '<p class="muted">Aucune infraction enregistrée.</p>';
+    }
+
+    function addVehicle() {
+      const db = loadDB();
+      const v = {
+        id: crypto.randomUUID(),
+        citizenId: currentCitizenId,
+        plate: document.getElementById('vehPlate').value.trim().toUpperCase(),
+        model: document.getElementById('vehModel').value.trim(),
+        insurance: document.getElementById('vehInsurance').value,
+        stolen: document.getElementById('vehStolen').value
+      };
+      if (!v.plate || !v.model) { alert('Plaque et modèle obligatoires.'); return; }
+      db.vehicles.push(v);
+      saveDB(db);
+      document.getElementById('vehPlate').value = '';
+      document.getElementById('vehModel').value = '';
+      renderVehicles();
+      refreshAll();
+    }
+
+    function renderVehicles() {
+      const db = loadDB();
+      const list = db.vehicles.filter(v => v.citizenId === currentCitizenId);
+      document.getElementById('vehiclesList').innerHTML = list.length ? `
+        <table><tr><th>Plaque</th><th>Modèle</th><th>Assurance</th><th>Volé</th></tr>
+        ${list.map(v => `<tr><td>${v.plate}</td><td>${v.model}</td><td>${v.insurance}</td><td>${v.stolen}</td></tr>`).join('')}
+        </table>` : '<p class="muted">Aucun véhicule enregistré.</p>';
+    }
+
+    function renderSearch() {
+      const db = loadDB();
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      const results = db.citizens.filter(c => {
+        const vehicles = db.vehicles.filter(v => v.citizenId === c.id).map(v => v.plate).join(' ');
+        return `${c.nom} ${c.prenom} ${c.identite} ${vehicles}`.toLowerCase().includes(q);
+      });
+      document.getElementById('searchResults').innerHTML = results.length ? `
+        <table><tr><th>Nom</th><th>Identité</th><th>Permis</th><th>Action</th></tr>
+        ${results.map(c => `<tr><td>${c.nom} ${c.prenom}</td><td>${c.identite}</td><td>${c.permis}</td><td><button onclick="openRecord('${c.id}')">Ouvrir</button></td></tr>`).join('')}
+        </table>` : '<p class="muted">Aucun résultat.</p>';
+    }
+
+    function createUser() {
+      const db = loadDB();
+      const username = document.getElementById('newUserName').value.trim();
+      const password = document.getElementById('newUserPass').value.trim();
+      const role = document.getElementById('newUserRole').value.trim() || 'Gendarme';
+      if (!username || !password) { alert('Identifiant et mot de passe obligatoires.'); return; }
+      if (db.users.some(u => u.username === username)) { alert('Identifiant déjà existant.'); return; }
+      db.users.push({ id: crypto.randomUUID(), username, password, role });
+      saveDB(db);
+      document.getElementById('newUserName').value = '';
+      document.getElementById('newUserPass').value = '';
+      document.getElementById('newUserRole').value = '';
+      renderUsers();
+    }
+
+    function renderUsers() {
+      const db = loadDB();
+      document.getElementById('usersList').innerHTML = `
+        <table><tr><th>Identifiant</th><th>Grade / rôle</th></tr>
+        ${db.users.map(u => `<tr><td>${u.username}</td><td>${u.role}</td></tr>`).join('')}
+        </table>`;
+    }
+
+    function deleteCurrentCitizen() {
+      if (!confirm('Supprimer définitivement cette fiche RP ?')) return;
+      const db = loadDB();
+      db.citizens = db.citizens.filter(c => c.id !== currentCitizenId);
+      db.infractions = db.infractions.filter(i => i.citizenId !== currentCitizenId);
+      db.vehicles = db.vehicles.filter(v => v.citizenId !== currentCitizenId);
+      saveDB(db);
+      showPage('dashboard', document.querySelector('.nav-btn'));
+    }
+
+    function refreshAll() {
+      const db = loadDB();
+      document.getElementById('countCitizens').textContent = db.citizens.length;
+      document.getElementById('countInfractions').textContent = db.infractions.length;
+      document.getElementById('countVehicles').textContent = db.vehicles.length;
+      document.getElementById('latestCitizens').innerHTML = db.citizens.length ? `
+        <table><tr><th>Nom</th><th>Identité</th><th>Créée par</th><th>Action</th></tr>
+        ${db.citizens.slice(-8).reverse().map(c => `<tr><td>${c.nom} ${c.prenom}</td><td>${c.identite}</td><td>${c.createdBy}</td><td><button onclick="openRecord('${c.id}')">Ouvrir</button></td></tr>`).join('')}
+        </table>` : '<p class="muted">Aucune fiche pour le moment.</p>';
+      renderUsers();
+      renderSearch();
+    }
+
+    loadDB();
+  </script>
+</body>
+</html>
