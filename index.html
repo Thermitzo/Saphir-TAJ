@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GN STML - Fichier central</title>
+  <title>GN RP - Fichier central</title>
   <style>
     * { box-sizing: border-box; }
 body {
@@ -151,10 +151,10 @@ body {
     tr:hover td { background: #f8fafc; }
     .muted { color: #64748b; }
     .record-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: start;
+      <div>
+  <button onclick="editCitizen()">Modifier fiche</button>
+  <button class="danger" onclick="deleteCurrentCitizen()">Supprimer fiche</button>
+</div>
     }
     .info-line {
       display: grid;
@@ -205,7 +205,7 @@ body {
 <body>
   <section id="loginScreen" class="login-screen">
     <div class="login-card">
-      <h1>Fichier CENTRALE GN STML</h1>
+      <h1>Fichier GN RP</h1>
       <p>Connexion sécurisée - Serveur RP</p>
       <label>Identifiant</label>
 <div class="input-group">
@@ -366,6 +366,26 @@ body {
       document.getElementById('loginScreen').classList.add('hidden');
       document.getElementById('app').classList.remove('hidden');
       document.getElementById('currentUser').textContent = `${user.role} - ${user.username}`;
+      function editCitizen() {
+  const db = loadDB();
+  const citizen = db.citizens.find(c => c.id === currentCitizenId);
+
+  const nom = prompt("Nom :", citizen.nom);
+  const prenom = prompt("Prénom :", citizen.prenom);
+  const identite = prompt("N° Identité :", citizen.identite);
+  const obs = prompt("Observations :", citizen.obs);
+
+  if (nom) citizen.nom = nom;
+  if (prenom) citizen.prenom = prenom;
+  if (identite) citizen.identite = identite;
+  citizen.obs = obs || "";
+
+  saveDB(db);
+  renderRecord();
+  refreshAll();
+
+  alert("Fiche modifiée avec succès.");
+}
       refreshAll();
     }
 
