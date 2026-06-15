@@ -151,10 +151,7 @@ body {
     tr:hover td { background: #f8fafc; }
     .muted { color: #64748b; }
     .record-header {
-      <div>
-  <button onclick="editCitizen()">Modifier fiche</button>
-  <button class="danger" onclick="deleteCurrentCitizen()">Supprimer fiche</button>
-</div>
+      
     }
     .info-line {
       display: grid;
@@ -280,7 +277,10 @@ body {
                 <h1 id="recordTitle">Fiche</h1>
                 <p class="muted" id="recordSubtitle"></p>
               </div>
-              <button class="danger" onclick="deleteCurrentCitizen()">Supprimer fiche</button>
+              <div>
+  <button onclick="editCitizen()">Modifier fiche</button>
+  <button class="danger" onclick="deleteCurrentCitizen()">Supprimer fiche</button>
+</div>
             </div>
             <div id="recordInfos"></div>
           </div>
@@ -384,20 +384,25 @@ body {
   renderRecord();
   refreshAll();
 
+function editCitizen() {
+  const db = loadDB();
+  const citizen = db.citizens.find(c => c.id === currentCitizenId);
+
+  const nom = prompt("Nom :", citizen.nom);
+  const prenom = prompt("Prénom :", citizen.prenom);
+  const identite = prompt("N° Identité :", citizen.identite);
+  const obs = prompt("Observations :", citizen.obs);
+
+  if (nom) citizen.nom = nom;
+  if (prenom) citizen.prenom = prenom;
+  if (identite) citizen.identite = identite;
+  citizen.obs = obs || "";
+
+  saveDB(db);
+  renderRecord();
+  refreshAll();
+
   alert("Fiche modifiée avec succès.");
-}
-      refreshAll();
-    }
-
-    function logout() { location.reload(); }
-
-    function showPage(id, btn) {
-      document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
-      refreshAll();
-    }
 
     function createCitizen() {
       const db = loadDB();
@@ -535,13 +540,30 @@ body {
       renderUsers();
     }
 
-    function renderUsers() {
-      const db = loadDB();
-      document.getElementById('usersList').innerHTML = `
-        <table><tr><th>Identifiant</th><th>Grade / rôle</th></tr>
-        ${db.users.map(u => `<tr><td>${u.username}</td><td>${u.role}</td></tr>`).join('')}
-        </table>`;
-    }
+function renderUsers() {
+  const db = loadDB();
+
+  document.getElementById('usersList').innerHTML = `
+    <table>
+      <tr>
+        <th>Identifiant</th>
+        <th>Grade</th>
+        <th>Action</th>
+      </tr>
+
+      ${db.users.map(u => `
+        <tr>
+          <td>${u.username}</td>
+          <td>${u.role}</td>
+          <td>
+            <button onclick="editUser('${u.id}')">Modifier</button>
+            <button class="danger" onclick="deleteUser('${u.id}')">Supprimer</button>
+          </td>
+        </tr>
+      `).join('')}
+    </table>
+  `;
+}
 
     function deleteCurrentCitizen() {
       if (!confirm('Supprimer définitivement cette fiche RP ?')) return;
@@ -565,7 +587,38 @@ body {
       renderUsers();
       renderSearch();
     }
+function editUser(id) {
+  const db = loadDB();
 
+  const user = db.users.find(u => u.id === id);
+
+  const username = prompt("Nouvel identifiant :", user.username);
+  const password = prompt("Nouveau mot de passe :", user.password);
+  const role = prompt("Nouveau grade :", user.role);
+
+  if(username) user.username = username;
+  if(password) user.password = password;
+  if(role) user.role = role;
+
+  saveDB(db);
+  renderUsers();
+
+  alert("Compte modifié.");
+}
+function deleteUser(id) {
+
+  if(!confirm("Supprimer ce compte ?")) return;
+
+  const db = loadDB();
+
+  db.users = db.users.filter(u => u.id !== id);
+
+  saveDB(db);
+
+  renderUsers();
+
+  alert("Compte supprimé.");
+}
     loadDB();
   </script>
 </body>
