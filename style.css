@@ -1,0 +1,73 @@
+body{
+    margin:0;
+    font-family:Arial;
+    background:url("fond.jpg") center center fixed;
+    background-size:cover;
+}
+
+.hidden{
+    display:none;
+}
+
+.login-screen{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,.6);
+}
+
+.login-box{
+    width:350px;
+    background:#0f172a;
+    padding:25px;
+    border-radius:10px;
+}
+
+.login-box h1{
+    color:white;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+}
+
+button{
+    margin-top:10px;
+    padding:10px;
+    cursor:pointer;
+}
+
+header{
+    background:#1e293b;
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    padding:15px;
+}
+
+nav{
+    background:#334155;
+    padding:10px;
+}
+
+nav button{
+    margin-right:10px;
+}
+
+.page{
+    padding:20px;
+}
+
+.cards{
+    display:flex;
+    gap:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+}
